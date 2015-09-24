@@ -166,10 +166,21 @@ public class CoreDataTableViewController: UITableViewController, NSFetchedResult
             case .Update:
                 tableView.reloadRowsAtIndexPaths([indexPath!], withRowAnimation: .Fade)
             case .Move:
-                // TODO: fix bug when moving rows in iOS 8.3 and 8.4 - Xcode 7.0 (7A220)
-                // SEE: http://stackoverflow.com/questions/31383760/ios-9-attempt-to-delete-and-reload-the-same-index-path
-                tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Fade)
-                tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Fade)
+                // TOPIC bug when moving rows in iOS 8.3 and 8.4 - Xcode 7.0 (7A220)
+                // WORKAROUND: Break for iOS 8.3 and 8.4...can be deleted as soon this bug is fixed
+                // SEE: https://forums.developer.apple.com/thread/4999 and
+                // http://stackoverflow.com/questions/31383760/ios-9-attempt-to-delete-and-reload-the-same-index-path
+                
+                let os = NSProcessInfo().operatingSystemVersion
+                switch (os.majorVersion, os.minorVersion) {
+                case (8, 3):
+                    break
+                case (8, 4):
+                    break
+                default:
+                    tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Fade)
+                    tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Fade)
+                }
             }
         }
     }
