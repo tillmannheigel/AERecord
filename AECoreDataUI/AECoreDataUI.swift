@@ -159,12 +159,12 @@ public class CoreDataTableViewController: UITableViewController, NSFetchedResult
     public func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
         if !suspendAutomaticTrackingOfChangesInManagedObjectContext {
             switch type {
+            case .Update:
+                tableView.reloadRowsAtIndexPaths([indexPath!], withRowAnimation: .Fade)
             case .Insert:
                 tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Fade)
             case .Delete:
                 tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Fade)
-            case .Update:
-                tableView.reloadRowsAtIndexPaths([indexPath!], withRowAnimation: .Fade)
             case .Move:
                 // TOPIC bug when moving rows in iOS 8.3 and 8.4 - Xcode 7.0 (7A220)
                 // WORKAROUND: Break for iOS 8.3 and 8.4...can be deleted as soon this bug is fixed
